@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Tap Cat 🐱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f5f5f5;
+    }
+    img {
+      width: 300px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🐱 Тапай кота</h2>
+<p>Каждый тап тратит ⚡ энергию</p>
+
+<img src="cat.jpg" id="cat">
+
+<script>
+const tg = Telegram.WebApp;
+tg.expand();
+
+document.getElementById("cat").onclick = () => {
+  tg.sendData(JSON.stringify({ action: "tap" }));
+};
+</script>
+
+</body>
+</html>
