@@ -1,21 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-  <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cat Clicker</title>
+    <!-- Подключаем скрипт Telegram -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        body {
+            background-color: var(--tg-theme-bg-color, #ffffff); /* Цвет фона как в теме Telegram */
+            color: var(--tg-theme-text-color, #000000); /* Цвет текста как в теме */
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Убираем прокрутку */
+        }
 
-<body>
-  <img id="cat" src="cat.png" style="width:800px; user-select:none; -webkit-user-select:none;">
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.ready(); // рекомендуют вызвать как можно раньше [page:8]
+        #score {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-    let taps = 0;
-    document.getElementById("cat").addEventListener("click", () => {
-      taps += 1;
-      tg.HapticFeedback?.impactOccurred?.("light");
-      tg.showAlert?.("Тап: " + taps);
+        .cat-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.1s; /* Плавная анимация клика */
+            -webkit-tap-highlight-color: transparent; /* Убирает синий фон при клике на Android */
+        }
 
-      // Если нужно отправить в бота:
-      // tg.sendData(JSON.stringify({taps}));
+        .cat-container:active {
+            transform: scale(0.95); /* Уменьшение при нажатии */
+        }
+
+        img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%; /* Круглая картинка */
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            user-select: none; /* Запрет выделения */
+            -webkit-user-select: none;
+            pointer-events: none; /* Чтобы клик проходил сквозь картинку на контейнер */
+        }
+    </style>
+  <button id="withdrawBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 18px;">
+    Отправить боту
+</button>
+
+<script>
+    // ... ваш код счетчика ...
+
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    
+    withdrawBtn.addEventListener('click', () => {
+        // Отправляем данные боту
+        // Это закроет окно и пришлет сообщение в чат с ботом
+        tg.sendData(JSON.stringify({ 
+            action: "withdraw", 
+            amount: currentScore 
+        }));
     });
-  </script>
+</script>
+
+</head>
+<body>
+
+    <!-- Счётчик -->
+    <div id="score">0</div>
+
+    <!-- Кот (Кнопка) -->
+    <div class="cat-container" id="catBtn">
+        <!-- Замени ссылку ниже на свою картинку, если есть -->
+        <img src="cat.png" alt="Cat">
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Раскрыть на весь экран
+
+        // Ссылки на элементы
+        const scoreElement = document.getElementById('score');
+        const catBtn = document.getElementById('catBtn');
+
+        // 1. ЗАГРУЗКА: Проверяем, есть ли сохраненный счёт в памяти телефона
+        // Если есть — берем его, если нет — ставим 0
+        let currentScore = Number(localStorage.getItem('cat_score')) || 0;
+        
+        // Показываем загруженный счёт сразу
+        scoreElement.innerText = currentScore;
+
+        // Обработка клика
+        catBtn.addEventListener('click', () => {
+            // Увеличиваем счёт
+            currentScore++;
+            
+            // Обновляем текст на экране
+            scoreElement.innerText = currentScore;
+
+            // 2. СОХРАНЕНИЕ: Записываем новый счёт в память телефона
+            localStorage.setItem('cat_score', currentScore);
+
+            // Вибрация при клике (работает только внутри Telegram)
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+        });
+    </script>
 </body>
+</html>
