@@ -1,51 +1,21 @@
-<!doctype html>
-<html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body { font-family: sans-serif; text-align:center; padding:16px; }
-    #cat { width: 260px; max-width: 90vw; user-select:none; -webkit-user-drag:none; }
-    .counter { font-size: 20px; margin-top: 12px; }
-    .hint { opacity: .7; margin-top: 6px; }
-  </style>
+  <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
 </head>
-<body>
-  <h3>Тапай кота</h3>
-  <img id="cat" src="cat.png" alt="cat" />
-  <div class="counter">Клики: <span id="c">0</span></div>
-  <div class="hint">5555 → подарок за 15⭐, 10000 → подарок за 25⭐</div>
 
+<body>
+  <img id="cat" src="cat.png" style="width:200px; user-select:none; -webkit-user-select:none;">
   <script>
     const tg = window.Telegram.WebApp;
-    tg.ready();
+    tg.ready(); // рекомендуют вызвать как можно раньше [page:8]
 
-    const cEl = document.getElementById("c");
-    const cat = document.getElementById("cat");
+    let taps = 0;
+    document.getElementById("cat").addEventListener("click", () => {
+      taps += 1;
+      tg.HapticFeedback?.impactOccurred?.("light");
+      tg.showAlert?.("Тап: " + taps);
 
-    async function loadState() {
-      const r = await fetch("/api/state", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ initData: tg.initData })
-      });
-      const j = await r.json();
-      if (j.ok) cEl.textContent = j.clicks;
-    }
-
-    async function tap() {
-      const r = await fetch("/api/tap", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ initData: tg.initData })
-      });
-      const j = await r.json();
-      if (j.ok) cEl.textContent = j.clicks;
-    }
-
-    cat.addEventListener("click", tap);
-    loadState();
+      // Если нужно отправить в бота:
+      // tg.sendData(JSON.stringify({taps}));
+    });
   </script>
 </body>
-</html>
