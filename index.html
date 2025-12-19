@@ -1,38 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Tap Cat 🐱</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      background: #f5f5f5;
-    }
-    img {
-      width: 300px;
-      border-radius: 12px;
-      cursor: pointer;
-    }
+    body { font-family: sans-serif; text-align:center; padding:16px; }
+    #cat { width: 260px; max-width: 90vw; user-select:none; -webkit-user-drag:none; }
+    .counter { font-size: 20px; margin-top: 12px; }
+    .hint { opacity: .7; margin-top: 6px; }
   </style>
 </head>
 <body>
+  <h3>Тапай кота</h3>
+  <img id="cat" src="cat.png" alt="cat" />
+  <div class="counter">Клики: <span id="c">0</span></div>
+  <div class="hint">5555 → подарок за 15⭐, 10000 → подарок за 25⭐</div>
 
-<h2>🐱 Тапай кота</h2>
-<p>Каждый тап тратит ⚡ энергию</p>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
 
-<img src="cat.png" id="cat">
+    const cEl = document.getElementById("c");
+    const cat = document.getElementById("cat");
 
-<script>
-const tg = Telegram.WebApp;
-tg.expand();
+    async function loadState() {
+      const r = await fetch("/api/state", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ initData: tg.initData })
+      });
+      const j = await r.json();
+      if (j.ok) cEl.textContent = j.clicks;
+    }
 
-document.getElementById("cat").onclick = () => {
-  tg.sendData(JSON.stringify({ action: "tap" }));
-};
-</script>
+    async function tap() {
+      const r = await fetch("/api/tap", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ initData: tg.initData })
+      });
+      const j = await r.json();
+      if (j.ok) cEl.textContent = j.clicks;
+    }
 
+    cat.addEventListener("click", tap);
+    loadState();
+  </script>
 </body>
 </html>
