@@ -129,6 +129,8 @@
 
     <script>
         let count = 0;
+        const usedPromos = new Set(); // Храним использованные промокоды
+
         // Промокоды (в реальных приложениях храните на сервере)
         const promos = {
             "CAT50": 50,
@@ -155,11 +157,17 @@
 
         function applyPromo() {
             const input = document.getElementById("promoInput");
-            const code = input.value.trim();
+            const code = input.value.trim().toUpperCase();
+
+            if (usedPromos.has(code)) {
+                alert("Этот промокод уже использован.");
+                return;
+            }
 
             if (promos[code]) {
                 count += promos[code];
                 document.getElementById("counter").innerText = count + " кликов";
+                usedPromos.add(code); // Отмечаем как использованный
                 alert("Промокод активирован! +" + promos[code] + " кликов!");
                 input.value = "";
             } else {
@@ -171,6 +179,8 @@
             if (window.Telegram && window.Telegram.WebApp) {
                 Telegram.WebApp.sendData(count.toString());
                 Telegram.WebApp.close();
+            } else {
+                alert("Telegram WebApp не загружен.");
             }
         }
     </script>
