@@ -2,116 +2,177 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cat Clicker</title>
-    <!-- Подключаем скрипт Telegram  -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тапни кота! | Neon Style</title>
     <style>
         body {
-            background-color: var(--tg-theme-bg-color, #ffffff); /* Цвет фона как в теме Telegram */
-            color: var(--tg-theme-text-color, #000000); /* Цвет текста как в теме */
-            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0d0d0d;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden; /* Убираем прокрутку */
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        #score {
-            font-size: 48px;
-            font-weight: bold;
+        h1 {
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 30px #00f3ff;
             margin-bottom: 20px;
         }
 
-        .cat-container {
-            position: relative;
+        #cat {
+            width: 200px;
+            height: 200px;
             cursor: pointer;
-            transition: transform 0.1s; /* Плавная анимация клика */
-            -webkit-tap-highlight-color: transparent; /* Убирает синий фон при клике на Android */
+            border-radius: 50%;
+            box-shadow: 0 0 20px #ff00c8, 0 0 30px #ff00c8, 0 0 40px #ff00c8;
+            transition: transform 0.1s ease;
+            margin: 20px auto;
         }
 
-        .cat-container:active {
-            transform: scale(0.95); /* Уменьшение при нажатии */
+        #cat:active {
+            transform: scale(0.95);
         }
 
-        img {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%; /* Круглая картинка */
-            object-fit: cover;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            user-select: none; /* Запрет выделения */
-            -webkit-user-select: none;
-            pointer-events: none; /* Чтобы клик проходил сквозь картинку на контейнер */
+        #counter {
+            font-size: 3em;
+            margin: 30px 0;
+            color: #00ffea;
+            text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea;
+        }
+
+        input {
+            background: transparent;
+            color: #00ffea;
+            border: 2px solid #00ffea;
+            padding: 10px;
+            font-size: 1.2em;
+            width: 80%;
+            max-width: 300px;
+            margin: 15px 0;
+            text-align: center;
+            outline: none;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #00ffea;
+        }
+
+        button {
+            background: transparent;
+            color: #ff00c8;
+            border: 2px solid #ff00c8;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            margin: 10px;
+            outline: none;
+            border-radius: 5px;
+            text-shadow: 0 0 10px #ff00c8;
+            box-shadow: 0 0 10px #ff00c8, 0 0 20px #ff00c8;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: rgba(255, 0, 200, 0.2);
+            box-shadow: 0 0 20px #ff00c8, 0 0 40px #ff00c8;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #ff00c8, 0 0 20px #ff00c8; }
+            50% { box-shadow: 0 0 20px #ff00c8, 0 0 40px #ff00c8; }
+            100% { box-shadow: 0 0 10px #ff00c8, 0 0 20px #ff00c8; }
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
-  <button id="withdrawBtn" style="margin-top: 20px; padding: 10px 20px; font-size: 18px;">
-    Отправить боту
-</button>
-
-<script>
-    // ... ваш код счетчика ...
-
-    const withdrawBtn = document.getElementById('withdrawBtn');
-    
-    withdrawBtn.addEventListener('click', () => {
-        // Отправляем данные боту
-        // Это закроет окно и пришлет сообщение в чат с ботом
-        tg.sendData(JSON.stringify({ 
-            action: "withdraw", 
-            amount: currentScore 
-        }));
-    });
-</script>
-
 </head>
 <body>
+    <div class="container">
+        <h1>Тапни кота!</h1>
 
-    <!-- Счётчик -->
-    <div id="score">0</div>
+        <img id="cat" class="pulse" src="cat.jpg" alt="Кот" onclick="tap()">
 
-    <!-- Кот (Кнопка) -->
-    <div class="cat-container" id="catBtn">
-        <!-- Замени ссылку ниже на свою картинку, если есть -->
-        <img src="cat.png" alt="Cat">
+        <div id="counter">0 кликов</div>
+
+        <!-- Меню вывода -->
+        <div id="stats" class="hidden">
+            <p>Всего кликов: <span id="totalClicks">0</span></p>
+        </div>
+
+        <!-- Промокод -->
+        <input type="text" id="promoInput" placeholder="Введите промокод">
+        <button onclick="applyPromo()">Применить промокод</button>
+
+        <button onclick="showStats()">Посмотреть статистику</button>
+        <button onclick="sendData()">Отправить результат</button>
     </div>
 
     <script>
-        // Инициализация Telegram WebApp
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Раскрыть на весь экран
+        let count = 0;
+        // Промокоды (в реальных приложениях храните на сервере)
+        const promos = {
+            "CAT50": 50,
+            "TAP100": 100,
+            "NEON200": 200
+        };
 
-        // Ссылки на элементы
-        const scoreElement = document.getElementById('score');
-        const catBtn = document.getElementById('catBtn');
+        function tap() {
+            count++;
+            document.getElementById("counter").innerText = count + " кликов";
 
-        // 1. ЗАГРУЗКА: Проверяем, есть ли сохраненный счёт в памяти телефона
-        // Если есть — берем его, если нет — ставим 0
-        let currentScore = Number(localStorage.getItem('cat_score')) || 0;
-        
-        // Показываем загруженный счёт сразу
-        scoreElement.innerText = currentScore;
+            // Визуальный эффект при тапе
+            const cat = document.getElementById("cat");
+            cat.style.transform = "scale(0.95)";
+            setTimeout(() => {
+                cat.style.transform = "scale(1)";
+            }, 100);
+        }
 
-        // Обработка клика
-        catBtn.addEventListener('click', () => {
-            // Увеличиваем счёт
-            currentScore++;
-            
-            // Обновляем текст на экране
-            scoreElement.innerText = currentScore;
+        function showStats() {
+            document.getElementById("totalClicks").innerText = count;
+            document.getElementById("stats").classList.remove("hidden");
+        }
 
-            // 2. СОХРАНЕНИЕ: Записываем новый счёт в память телефона
-            localStorage.setItem('cat_score', currentScore);
+        function applyPromo() {
+            const input = document.getElementById("promoInput");
+            const code = input.value.trim();
 
-            // Вибрация при клике (работает только внутри Telegram)
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
+            if (promos[code]) {
+                count += promos[code];
+                document.getElementById("counter").innerText = count + " кликов";
+                alert("Промокод активирован! +" + promos[code] + " кликов!");
+                input.value = "";
+            } else {
+                alert("Неверный промокод.");
             }
-        });
+        }
+
+        function sendData() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.sendData(count.toString());
+                Telegram.WebApp.close();
+            }
+        }
     </script>
 </body>
 </html>
