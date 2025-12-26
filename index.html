@@ -12,7 +12,7 @@
             color: #fff;
             font-family: 'Courier New', monospace;
             text-align: center;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .container {
@@ -25,20 +25,20 @@
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 1.8em;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             color: #fff;
-            text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 30px #00f3ff;
-            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff;
+            margin-bottom: 10px;
         }
 
         #cat {
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
             cursor: pointer;
             border-radius: 50%;
-            box-shadow: 0 0 20px #ff00c8, 0 0 30px #ff00c8, 0 0 40px #ff00c8;
+            box-shadow: 0 0 20px #ff00c8, 0 0 30px #ff00c8;
             transition: transform 0.1s ease;
             margin: 20px auto;
         }
@@ -48,21 +48,21 @@
         }
 
         #counter {
-            font-size: 3em;
-            margin: 30px 0;
+            font-size: 2.5em;
+            margin: 20px 0;
             color: #00ffea;
-            text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea;
+            text-shadow: 0 0 10px #00ffea;
         }
 
         input {
             background: transparent;
             color: #00ffea;
             border: 2px solid #00ffea;
-            padding: 10px;
-            font-size: 1.2em;
+            padding: 8px;
+            font-size: 1em;
             width: 80%;
-            max-width: 300px;
-            margin: 15px 0;
+            max-width: 250px;
+            margin: 10px 0;
             text-align: center;
             outline: none;
             border-radius: 5px;
@@ -73,22 +73,22 @@
             background: transparent;
             color: #ff00c8;
             border: 2px solid #ff00c8;
-            padding: 15px 30px;
-            font-size: 1.2em;
+            padding: 10px 20px;
+            font-size: 1em;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             cursor: pointer;
-            margin: 10px;
+            margin: 8px;
             outline: none;
             border-radius: 5px;
             text-shadow: 0 0 10px #ff00c8;
-            box-shadow: 0 0 10px #ff00c8, 0 0 20px #ff00c8;
+            box-shadow: 0 0 10px #ff00c8;
             transition: all 0.3s ease;
         }
 
         button:hover {
             background: rgba(255, 0, 200, 0.2);
-            box-shadow: 0 0 20px #ff00c8, 0 0 40px #ff00c8;
+            box-shadow: 0 0 20px #ff00c8;
         }
 
         .pulse {
@@ -96,9 +96,9 @@
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 10px #ff00c8, 0 0 20px #ff00c8; }
-            50% { box-shadow: 0 0 20px #ff00c8, 0 0 40px #ff00c8; }
-            100% { box-shadow: 0 0 10px #ff00c8, 0 0 20px #ff00c8; }
+            0% { box-shadow: 0 0 10px #ff00c8; }
+            50% { box-shadow: 0 0 20px #ff00c8; }
+            100% { box-shadow: 0 0 10px #ff00c8; }
         }
 
         .hidden {
@@ -110,7 +110,7 @@
     <div class="container">
         <h1>Тапни кота!</h1>
 
-        <img id="cat" class="pulse" src="cat.png" alt="Кот" onclick="tap()">
+        <img id="cat" class="pulse" src="https://cataas.com/cat" alt="Кот" onclick="tap()">
 
         <div id="counter">0 кликов</div>
 
