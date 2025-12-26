@@ -108,7 +108,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Тапни кота!</h1>
+        <h1>ТАПНИ КОТА!</h1>
 
         <img id="cat" class="pulse" src="cat.png" alt="Кот" onclick="tap()">
 
@@ -121,10 +121,10 @@
 
         <!-- Промокод -->
         <input type="text" id="promoInput" placeholder="Введите промокод">
-        <button onclick="applyPromo()">Применить промокод</button>
+        <button onclick="applyPromo()">ПРИМЕНИТЬ ПРОМОКОД</button>
 
-        <button onclick="showStats()">Посмотреть статистику</button>
-        <button onclick="sendData()">Отправить результат</button>
+        <button onclick="showStats()">ПОСМОТРЕТЬ СТАТИСТИКУ</button>
+        <button onclick="sendData()">ОТПРАВИТЬ РЕЗУЛЬТАТ</button>
     </div>
 
     <script>
@@ -176,11 +176,16 @@
         }
 
         function sendData() {
-            if (window.Telegram && window.Telegram.WebApp) {
-                Telegram.WebApp.sendData(count.toString());
-                Telegram.WebApp.close();
+            if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
+                try {
+                    console.log("Отправляем данные:", count);
+                    window.Telegram.WebApp.sendData(count.toString());
+                    window.Telegram.WebApp.close();
+                } catch (e) {
+                    alert("Ошибка отправки данных: " + e.message);
+                }
             } else {
-                alert("Telegram WebApp не загружен.");
+                alert("Telegram WebApp не загружен. Откройте через бота.");
             }
         }
     </script>
