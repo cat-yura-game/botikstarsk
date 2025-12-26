@@ -25,7 +25,7 @@
         }
 
         h1 {
-            font-size: 1.8em;
+            font-size: 1.6em;
             text-transform: uppercase;
             letter-spacing: 3px;
             color: #fff;
@@ -48,7 +48,7 @@
         }
 
         #counter {
-            font-size: 2.5em;
+            font-size: 2.2em;
             margin: 20px 0;
             color: #00ffea;
             text-shadow: 0 0 10px #00ffea;
@@ -121,10 +121,10 @@
 
         <!-- Промокод -->
         <input type="text" id="promoInput" placeholder="Введите промокод">
-        <button onclick="applyPromo()">ПРИМЕНИТЬ ПРОМОКОД</button>
+        <button onclick="applyPromo()">Применить промокод</button>
 
-        <button onclick="showStats()">ПОСМОТРЕТЬ СТАТИСТИКУ</button>
-        <button onclick="sendData()">ОТПРАВИТЬ РЕЗУЛЬТАТ</button>
+        <button onclick="showStats()">Посмотреть статистику</button>
+        <button onclick="sendData()">Отправить результат</button>
     </div>
 
     <script>
@@ -178,11 +178,10 @@
         function sendData() {
             if (typeof window.Telegram !== 'undefined' && window.Telegram.WebApp) {
                 try {
-                    console.log("Отправляем данные:", count);
                     window.Telegram.WebApp.sendData(count.toString());
                     window.Telegram.WebApp.close();
                 } catch (e) {
-                    alert("Ошибка отправки данных: " + e.message);
+                    alert("Ошибка отправки: " + e.message);
                 }
             } else {
                 alert("Telegram WebApp не загружен. Откройте через бота.");
